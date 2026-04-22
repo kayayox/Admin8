@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.10)
+project(MotorNLP VERSION 1.0.0 LANGUAGES CXX)
+
+# Requerir C++17 (para std::optional, std::string_view, etc.)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Buscar SQLite3 (necesario para toda la persistencia)
+find_package(SQLite3 REQUIRED)
+
+# Recopilar todos los archivos fuente .cpp recursivamente
+file(GLOB_RECURSE SOURCES
+    "*.cpp"
+)
+
+# Construir el ejecutable principal
+add_executable(motor_nlp ${SOURCES})
+
+# Hacer visible la raíz del proyecto para #include "subdir/archivo.h"
+target_include_directories(motor_nlp PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Enlazar la biblioteca SQLite3
+target_link_libraries(motor_nlp PRIVATE SQLite::SQLite3)
+
+# Opcional: definir directorio de salida (por defecto es build/)
+# set_target_properties(motor_nlp PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
